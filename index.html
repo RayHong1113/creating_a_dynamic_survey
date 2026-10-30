@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+		<script src="script.js" defer></script>
+		<title>CatCat Game Survey</title>
+	</head>
+	<body>
+		<main id="wrapper">
+			<h1>CatCat Game Survey</h1>
+			<p class="notice">
+				Dear Gamer:
+				Hello! To provide our users with a better gaming experience, we are conducting this questionnaire survey. We kindly ask you to take a
+				few minutes to fill it out. We hope to get your true thoughts and valuable feedback. This survey could be conducted anonymously, and all data will be used solely for statistical analysis, so please feel free to complete it. There are no right or wrong answers, and thank you for your help.
+			</p>
+
+			<form method="post" id="survey_form" action="https://httpbin.org/post" novalidate>
+				<!-- Section 1: Player Information -->
+				<fieldset>
+					<legend>Player Information</legend>
+
+					<!-- Basic Form Inputs: Name & Email -->
+					<div class="formfield">
+						<label for="name">Full Name (Optional):</label>
+						<input type="text" id="name" name="name" placeholder="Enter or leave blank" autofocus />
+						<span class="error-message error" id="name-error">Please enter a valid name.</span>
+					</div>
+
+					<div class="formfield">
+						<label for="email">* Email Address:</label>
+						<input type="email" id="email" name="email" placeholder="example@email.com" required />
+						<span class="error-message error" id="email-error">Please enter a valid email address.</span>
+					</div>
+
+					<!-- Regex Validation Field: Gamer Username  -->
+					<div class="formfield">
+						<label for="username">* CatCat Username (Alphanumeric only, 4-15 characters):</label>
+						<input
+							type="text"
+							id="username"
+							name="username"
+							placeholder="e.g., CatGamer2026"
+							required
+						/>
+						<span class="error-message error" id="username-error">
+							Please enter a valid username (4-15 alphanumeric characters).
+						</span>
+					</div>
+
+					<!-- Choice-Based Input: Radio Button Group  -->
+					<div class="formfield">
+						<h3>* 1. What is your gender?</h3>
+						<ul>
+							<li>
+								<input type="radio" id="gender-male" name="gender" value="Male" />
+								<label for="gender-male">Male</label>
+							</li>
+							<li>
+								<input type="radio" id="gender-female" name="gender" value="Female" />
+								<label for="gender-female">Female</label>
+							</li>
+							<li>
+								<input type="radio" id="gender-other" name="gender" value="Other" />
+								<label for="gender-other">Other</label>
+							</li>
+						</ul>
+						<span class="error-message error" id="gender-error">Please choose your gender.</span>
+					</div>
+				</fieldset>
+
+				<!-- Section 2: Gaming Preferences -->
+				<fieldset>
+					<legend>Gaming Preferences</legend>
+
+					<!-- Dropdown Menu -->
+					<div class="formfield">
+						<label for="game-genre">* 2. What type of game do you like to play the most?</label>
+						<select id="game-genre" name="game-genre" required>
+							<option value="">-- Please select a game genre --</option>
+							<option value="RPG">Role-Playing Games (RPG)</option>
+							<option value="Competitive">Competitive Games</option>
+							<option value="Web Game">Web Games</option>
+							<option value="Action">Action / Adventure Games</option>
+							<option value="Simulation">Simulation Games</option>
+							<option value="Other">Other</option>
+						</select>
+						<span class="error-message error" id="game-genre-error">Please select a game genre.</span>
+					</div>
+
+					<div id="game-genre-other-wrapper" class="formfield other-specify">
+						<label for="game-genre-other-text">If Other, please specify:</label>
+						<input
+							type="text"
+							id="game-genre-other-text"
+							name="game-genre-other-text"
+							placeholder="Please specify game genre"
+						/>
+						<span class="error-message error" id="game-genre-other-error">
+							Please specify the other game genre.
+						</span>
+					</div>
+
+					<!-- Choice-Based Input: Checkbox Group-->
+					<div class="formfield">
+						<h3>* 3. Which CatCat games do you like the most? [Multiple Choice]</h3>
+						<ul>
+							<li>
+								<input type="checkbox" id="game-gac" name="favorite-games" value="Grand Auto Cat" />
+								<label for="game-gac">Grand Auto Cat</label>
+							</li>
+							<li>
+								<input type="checkbox" id="game-coc" name="favorite-games" value="Call of Cat" />
+								<label for="game-coc">Call of Cat</label>
+							</li>
+							<li>
+								<input type="checkbox" id="game-loc" name="favorite-games" value="League of Cats" />
+								<label for="game-loc">League of Cats</label>
+							</li>
+							<li>
+								<input type="checkbox" id="game-cc" name="favorite-games" value="Cat Creed" />
+								<label for="game-cc">Cat Creed</label>
+							</li>
+							<li>
+								<input type="checkbox" id="game-catcraft" name="favorite-games" value="Catcraft" />
+								<label for="game-catcraft">Catcraft</label>
+							</li>
+							<li>
+								<input type="checkbox" id="game-csgo" name="favorite-games" value="Cat Strike: GO" />
+								<label for="game-csgo">Cat Strike: GO</label>
+							</li>
+							<li>
+								<input type="checkbox" id="game-other" name="favorite-games" value="Other" />
+								<label for="game-other">Other:</label>
+								<input
+									type="text"
+									id="game-other-text"
+									name="game-other-text"
+									placeholder="Please specify"
+									aria-label="Please specify other CatCat game"
+								/>
+							</li>
+						</ul>
+						<span class="error-message error" id="favorite-games-error">
+							Please select at least one game.
+						</span>
+					</div>
+				</fieldset>
+
+				<!-- Section 3: Gaming Habits & Feedback -->
+				<fieldset>
+					<legend>Gaming Habits &amp; Feedback</legend>
+
+					<!-- Additional Input 1: Number Input -->
+					<div class="formfield">
+						<label for="play-hours">* 4. How many hours per day do you usually spend playing games?</label>
+						<input
+							type="number"
+							id="play-hours"
+							name="play-hours"
+							min="0"
+							max="24"
+							placeholder="0 - 24"
+							required
+						/>
+						<span class="error-message error" id="play-hours-error">
+							Please enter a valid number of hours (0 - 24).
+						</span>
+					</div>
+
+					<!-- Additional Input 2: Date Picker -->
+					<div class="formfield">
+						<label for="start-date">* 5. When did you first start playing CatCat games?</label>
+						<input type="date" id="start-date" name="start-date" required />
+						<span class="error-message error" id="start-date-error">Please select a start date.</span>
+					</div>
+
+					<!-- Additional Input 3: Textarea -->
+					<div class="formfield">
+						<label for="feedback">* 6. What do you think are the shortcomings of CatCat games?</label>
+						<textarea
+							id="feedback"
+							name="feedback"
+							rows="4"
+							cols="40"
+							placeholder="Share your thoughts and suggestions..."
+							required
+						></textarea>
+						<span class="error-message error" id="feedback-error">Please enter your feedback.</span>
+					</div>
+				</fieldset>
+
+				<!-- Section 4: Form Buttons -->
+				<fieldset>
+					<button type="reset">Clear Survey</button>
+					<button type="submit">Submit Survey</button>
+				</fieldset>
+			</form>
+		</main>
+	</body>
+</html>
