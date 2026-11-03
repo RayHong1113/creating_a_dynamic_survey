@@ -54,18 +54,17 @@ const formHasErrors = () => {
 		errorFlag = true;
 	};
 
-	const requiredFields = [
+	const requiredTextFields = [
 		"name",
 		"email",
 		"username",
-		"game-genre",
 		"play-hours",
 		"start-date",
 		"feedback"
 	];
 
-	//	Loop through the required fields and check to see the user entered a value
-	for (const field of requiredFields) {
+	//	Loop through the required text fields and check to see the user entered a value
+	for (const field of requiredTextFields) {
 		const textField = document.getElementById(field);
 
 		//	Determine if the user entered text
@@ -74,19 +73,25 @@ const formHasErrors = () => {
 		}
 	}
 
-	//	Validate fields that require regular expressions
-	const regexRules = [
-		{ id: "email", pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
-		{ id: "username", pattern: /^[a-zA-Z0-9]{4,15}$/ }
-	];
+	//	Validate the email format
+	const emailField = document.getElementById("email");
+	if (formFieldHasInput(emailField) && !isValidEmail(emailField)) {
+		showError("email-error", emailField, true);
+	}
 
-	for (const rule of regexRules) {
-		const field = document.getElementById(rule.id);
-		const regex = new RegExp(rule.pattern);
+	//	Validate the username format using a regular expression
+	const usernameField = document.getElementById("username");
+	if (
+		formFieldHasInput(usernameField) &&
+		!isValidRegex(usernameField, /^[a-zA-Z0-9]{4,15}$/)
+	) {
+		showError("username-error", usernameField, true);
+	}
 
-		if (formFieldHasInput(field) && !regex.test(field.value.trim())) {
-			showError(rule.id + "-error", field, true);
-		}
+	//	Validate the game genre dropdown selection
+	const genreSelect = document.getElementById("game-genre");
+	if (!isSelected(genreSelect)) {
+		showError("game-genre-error", genreSelect);
 	}
 
 	//	Check to ensure the user selected options for radio and checkbox groups
@@ -96,13 +101,13 @@ const formHasErrors = () => {
 	];
 
 	for (const group of choiceGroups) {
-		if (!document.querySelector(`input[name="${group.name}"]:checked`)) {
+		if (!hasCheckedOption(group.name)) {
 			showError(group.errorId);
 		}
 	}
 
 	//	Validate the other game genre field when "Other" is selected
-	if (document.getElementById("game-genre").value === "Other") {
+	if (genreSelect.value === "Other") {
 		const genreOtherInput = document.getElementById("game-genre-other-text");
 		if (!formFieldHasInput(genreOtherInput)) {
 			showError("game-genre-other-error", genreOtherInput);
@@ -119,15 +124,87 @@ const formHasErrors = () => {
 
 	//	Validate the play hours number range (0 - 24)
 	const playHoursField = document.getElementById("play-hours");
-	const hoursValue = Number(playHoursField.value);
 	if (
 		formFieldHasInput(playHoursField) &&
-		(isNaN(hoursValue) || hoursValue < 0 || hoursValue > 24)
+		!isValidNumberRange(playHoursField, 0, 24)
 	) {
 		showError("play-hours-error", playHoursField, true);
 	}
 
 	return errorFlag;
+};
+
+/*
+ * Determines if a text field element has input
+ *
+ * param   fieldElement A text field input element object
+ * return  True if the field contains input; False if nothing entered
+ */
+const formFieldHasInput = (fieldElement) => {
+	// Check if the text field has a value
+	if (fieldElement.value == null || fieldElement.value.trim() == "") {
+		// Invalid entry
+		return false;
+	}
+
+	// Valid entry
+	return true;
+};
+
+/*
+ * Validates an email input element using a regular expression.
+ *
+ * param   emailElement An email input element object
+ * return  True if the email format is valid; False otherwise
+ */
+const isValidEmail = (emailElement) => {
+	return isValidRegex(emailElement, /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+};
+
+/*
+ * Validates an input element's value against a regular expression pattern.
+ *
+ * param   inputElement The input element to validate
+ * param   pattern      The regular expression pattern to test
+ * return  True if the value matches the pattern; False otherwise
+ */
+const isValidRegex = (inputElement, pattern) => {
+	const regex = new RegExp(pattern);
+	return regex.test(inputElement.value.trim());
+};
+
+/*
+ * Determines if a dropdown select element has a non-default option selected.
+ *
+ * param   selectElement A select element object
+ * return  True if an option is selected; False if left at default
+ */
+const isSelected = (selectElement) => {
+	return formFieldHasInput(selectElement);
+};
+
+/*
+ * Determines if at least one radio button or checkbox with the given
+ * name attribute is checked.
+ *
+ * param   name The name attribute of the radio or checkbox group
+ * return  True if at least one option is checked; False otherwise
+ */
+const hasCheckedOption = (name) => {
+	return document.querySelector(`input[name="${name}"]:checked`) !== null;
+};
+
+/*
+ * Determines if a number input element's value falls within the specified range.
+ *
+ * param   numberElement The number input element object
+ * param   min           Minimum allowed value
+ * param   max           Maximum allowed value
+ * return  True if the value is a valid number between min and max; False otherwise
+ */
+const isValidNumberRange = (numberElement, min, max) => {
+	const value = Number(numberElement.value);
+	return !isNaN(value) && value >= min && value <= max;
 };
 
 /*
@@ -218,23 +295,6 @@ const resetForm = (e) => {
 };
 
 /*
- * Determines if a text field element has input
- *
- * param   fieldElement A text field input element object
- * return  True if the field contains input; False if nothing entered
- */
-const formFieldHasInput = (fieldElement) => {
-	// Check if the text field has a value
-	if (fieldElement.value == null || fieldElement.value.trim() == "") {
-		// Invalid entry
-		return false;
-	}
-
-	// Valid entry
-	return true;
-};
-
-/*
  * Creates table elements using DOM methods and adds the validated
  * survey data to the table.
  */
@@ -306,7 +366,7 @@ const clearButton = () => {
 	}
 
 	document.getElementById("clearbutton").style.display = "none";
-	saveListData();
+	localStorage.removeItem("surveyData");
 };
 
 /*
