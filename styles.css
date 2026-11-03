@@ -120,8 +120,10 @@ textarea {
 
 input:focus,
 select:focus,
-textarea:focus {
+textarea:focus,
+button:focus {
 	background-color: #eee;
+	outline: 2px solid #000;
 }
 
 #game-genre-other-wrapper {
@@ -144,7 +146,10 @@ button[type='reset'],
 
 button[type='submit']:hover,
 button[type='reset']:hover,
-#clearbutton:hover {
+#clearbutton:hover,
+button[type='submit']:focus,
+button[type='reset']:focus,
+#clearbutton:focus {
 	background-color: #524b1f;
 }
 
