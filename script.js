@@ -55,6 +55,7 @@ const formHasErrors = () => {
 	};
 
 	const requiredFields = [
+		"name",
 		"email",
 		"username",
 		"game-genre",
@@ -240,7 +241,7 @@ const formFieldHasInput = (fieldElement) => {
 const displayData = () => {
 	const tbody = document.getElementById("list");
 
-	const nameValue = document.getElementById("name").value.trim() || "Anonymous";
+	const nameValue = document.getElementById("name").value.trim();
 	const emailValue = document.getElementById("email").value.trim();
 	const usernameValue = document.getElementById("username").value.trim();
 	const genderValue = document.querySelector('input[name="gender"]:checked').value;
