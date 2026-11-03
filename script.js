@@ -103,7 +103,8 @@ const formHasErrors = () => {
 
 	for (const group of choiceGroups) {
 		if (!hasCheckedOption(group.name)) {
-			showError(group.errorId);
+			const firstOption = document.querySelector(`input[name="${group.name}"]`);
+			showError(group.errorId, firstOption);
 		}
 	}
 
