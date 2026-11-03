@@ -120,7 +120,7 @@ const formHasErrors = () => {
 	if (document.getElementById("game-other").checked) {
 		const gameOtherInput = document.getElementById("game-other-text");
 		if (!formFieldHasInput(gameOtherInput)) {
-			showError("favorite-games-error", gameOtherInput);
+			showError("game-other-error", gameOtherInput);
 		}
 	}
 
