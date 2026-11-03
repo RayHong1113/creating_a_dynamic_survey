@@ -4,12 +4,11 @@
 	Ray Hong
  */
 
-/*
- * Handles the submit event of the survey form
+/**
+ * Handles the submit event of the survey form.
  *
- * param e  A reference to the submit event
- * return   True if no validation errors; False if the form has
- *          validation errors
+ * @param {Event} e - A reference to the submit event
+ * @return {boolean} True if no validation errors; False if the form has validation errors
  */
 const validate = (e) => {
 	//	Prevents the form from navigating away on submit
@@ -30,10 +29,10 @@ const validate = (e) => {
 	return true;
 };
 
-/*
+/**
  * Does all the error checking for the form.
  *
- * return   True if an error was found; False if no errors were found
+ * @return {boolean} True if an error was found; False if no errors were found
  */
 const formHasErrors = () => {
 	let errorFlag = false;
@@ -134,11 +133,11 @@ const formHasErrors = () => {
 	return errorFlag;
 };
 
-/*
- * Determines if a text field element has input
+/**
+ * Determines if a text field element has input.
  *
- * param   fieldElement A text field input element object
- * return  True if the field contains input; False if nothing entered
+ * @param {HTMLElement} fieldElement - A text field input element object
+ * @return {boolean} True if the field contains input; False if nothing entered
  */
 const formFieldHasInput = (fieldElement) => {
 	// Check if the text field has a value
@@ -151,63 +150,63 @@ const formFieldHasInput = (fieldElement) => {
 	return true;
 };
 
-/*
+/**
  * Validates an email input element using a regular expression.
  *
- * param   emailElement An email input element object
- * return  True if the email format is valid; False otherwise
+ * @param {HTMLInputElement} emailElement - An email input element object
+ * @return {boolean} True if the email format is valid; False otherwise
  */
 const isValidEmail = (emailElement) => {
 	return isValidRegex(emailElement, /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 };
 
-/*
+/**
  * Validates an input element's value against a regular expression pattern.
  *
- * param   inputElement The input element to validate
- * param   pattern      The regular expression pattern to test
- * return  True if the value matches the pattern; False otherwise
+ * @param {HTMLInputElement} inputElement - The input element to validate
+ * @param {RegExp} pattern - The regular expression pattern to test
+ * @return {boolean} True if the value matches the pattern; False otherwise
  */
 const isValidRegex = (inputElement, pattern) => {
 	const regex = new RegExp(pattern);
 	return regex.test(inputElement.value.trim());
 };
 
-/*
+/**
  * Determines if a dropdown select element has a non-default option selected.
  *
- * param   selectElement A select element object
- * return  True if an option is selected; False if left at default
+ * @param {HTMLSelectElement} selectElement - A select element object
+ * @return {boolean} True if an option is selected; False if left at default
  */
 const isSelected = (selectElement) => {
 	return formFieldHasInput(selectElement);
 };
 
-/*
+/**
  * Determines if at least one radio button or checkbox with the given
  * name attribute is checked.
  *
- * param   name The name attribute of the radio or checkbox group
- * return  True if at least one option is checked; False otherwise
+ * @param {string} name - The name attribute of the radio or checkbox group
+ * @return {boolean} True if at least one option is checked; False otherwise
  */
 const hasCheckedOption = (name) => {
 	return document.querySelector(`input[name="${name}"]:checked`) !== null;
 };
 
-/*
+/**
  * Determines if a number input element's value falls within the specified range.
  *
- * param   numberElement The number input element object
- * param   min           Minimum allowed value
- * param   max           Maximum allowed value
- * return  True if the value is a valid number between min and max; False otherwise
+ * @param {HTMLInputElement} numberElement - The number input element object
+ * @param {number} min - Minimum allowed value
+ * @param {number} max - Maximum allowed value
+ * @return {boolean} True if the value is a valid number between min and max; False otherwise
  */
 const isValidNumberRange = (numberElement, min, max) => {
 	const value = Number(numberElement.value);
 	return !isNaN(value) && value >= min && value <= max;
 };
 
-/*
+/**
  * Resets (hides) all of the error messages on the page.
  */
 const hideAllErrors = () => {
@@ -218,13 +217,13 @@ const hideAllErrors = () => {
 	}
 };
 
-/*
+/**
  * Shows or hides a conditional "Other" text field based on whether
  * the "Other" option is active.
  *
- * param isOtherSelected  True if the "Other" option is selected
- * param containerElement The element to show or hide
- * param inputElement     The text input to clear and focus
+ * @param {boolean} isOtherSelected - True if the "Other" option is selected
+ * @param {HTMLElement} containerElement - The element to show or hide
+ * @param {HTMLInputElement} inputElement - The text input to clear and focus
  */
 const toggleOtherField = (isOtherSelected, containerElement, inputElement) => {
 	if (isOtherSelected) {
@@ -238,7 +237,7 @@ const toggleOtherField = (isOtherSelected, containerElement, inputElement) => {
 	}
 };
 
-/*
+/**
  * Handles the change event for the game genre dropdown to show or hide
  * the "Other" specification text field.
  */
@@ -250,7 +249,7 @@ const toggleGenreOther = () => {
 	toggleOtherField(genreSelect.value === "Other", otherWrapper, otherInput);
 };
 
-/*
+/**
  * Handles the change event for the "Other" favorite game checkbox to
  * show or hide its specification text field.
  */
@@ -261,12 +260,11 @@ const toggleGameOther = () => {
 	toggleOtherField(gameOtherCheckbox.checked, gameOtherInput, gameOtherInput);
 };
 
-/*
+/**
  * Handles the reset event for the form.
  *
- * param e A reference to the reset event
- * return  True allows the reset to happen; False prevents
- *         the browser from resetting the form.
+ * @param {Event} e - A reference to the reset event
+ * @return {boolean} True allows the reset to happen; False prevents the browser from resetting the form
  */
 const resetForm = (e) => {
 	// Confirm that the user wants to reset the form.
@@ -294,7 +292,7 @@ const resetForm = (e) => {
 	return false;
 };
 
-/*
+/**
  * Creates table elements using DOM methods and adds the validated
  * survey data to the table.
  */
@@ -356,7 +354,7 @@ const displayData = () => {
 	saveListData();
 };
 
-/*
+/**
  * Clears the data in the table and hides the clear button.
  */
 const clearButton = () => {
@@ -369,7 +367,7 @@ const clearButton = () => {
 	localStorage.removeItem("surveyData");
 };
 
-/*
+/**
  * Resets the form inputs after a successful submission.
  */
 const resetFields = () => {
@@ -379,7 +377,7 @@ const resetFields = () => {
 	document.getElementById("name").focus();
 };
 
-/*
+/**
  * Saves the data in the table to localStorage.
  */
 const saveListData = () => {
