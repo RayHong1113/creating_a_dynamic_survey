@@ -12,15 +12,20 @@
  *          validation errors
  */
 const validate = (e) => {
+	//	Prevents the form from navigating away on submit
+	e.preventDefault();
+
 	//	Hides all error elements on the page
 	hideAllErrors();
 
 	//	Determine if the form has errors
 	if (formHasErrors()) {
-		// 	Prevents the form from submitting
-		e.preventDefault();
 		return false;
 	}
+
+	//	Add validated data to the table and reset the form inputs
+	displayData();
+	resetFields();
 
 	return true;
 };
@@ -85,27 +90,12 @@ const formHasErrors = () => {
 
 	//	Check to ensure the user selected options for radio and checkbox groups
 	const choiceGroups = [
-		{
-			ids: ["gender-male", "gender-female", "gender-other"],
-			errorId: "gender-error"
-		},
-		{
-			ids: [
-				"game-gac",
-				"game-coc",
-				"game-loc",
-				"game-cc",
-				"game-catcraft",
-				"game-csgo",
-				"game-other"
-			],
-			errorId: "favorite-games-error"
-		}
+		{ name: "gender", errorId: "gender-error" },
+		{ name: "favorite-games", errorId: "favorite-games-error" }
 	];
 
 	for (const group of choiceGroups) {
-		const isChecked = group.ids.some((id) => document.getElementById(id).checked);
-		if (!isChecked) {
+		if (!document.querySelector(`input[name="${group.name}"]:checked`)) {
 			showError(group.errorId);
 		}
 	}
@@ -243,8 +233,108 @@ const formFieldHasInput = (fieldElement) => {
 	return true;
 };
 
+/*
+ * Creates table elements using DOM methods and adds the validated
+ * survey data to the table.
+ */
+const displayData = () => {
+	const tbody = document.getElementById("list");
+
+	const nameValue = document.getElementById("name").value.trim() || "Anonymous";
+	const emailValue = document.getElementById("email").value.trim();
+	const usernameValue = document.getElementById("username").value.trim();
+	const genderValue = document.querySelector('input[name="gender"]:checked').value;
+
+	const genreSelectValue = document.getElementById("game-genre").value;
+	const genreValue =
+		genreSelectValue === "Other"
+			? document.getElementById("game-genre-other-text").value.trim()
+			: genreSelectValue;
+
+	const checkedBoxes = document.querySelectorAll('input[name="favorite-games"]:checked');
+	const checkedGames = [];
+
+	for (const checkbox of checkedBoxes) {
+		if (checkbox.value === "Other") {
+			checkedGames.push(document.getElementById("game-other-text").value.trim());
+		} else {
+			checkedGames.push(checkbox.value);
+		}
+	}
+	const favoriteGamesValue = checkedGames.join(", ");
+
+	const playHoursValue = document.getElementById("play-hours").value.trim();
+	const startDateValue = document.getElementById("start-date").value;
+	const feedbackValue = document.getElementById("feedback").value.trim();
+
+	const rowValues = [
+		nameValue,
+		emailValue,
+		usernameValue,
+		genderValue,
+		genreValue,
+		favoriteGamesValue,
+		playHoursValue,
+		startDateValue,
+		feedbackValue
+	];
+
+	//	Build the row and its tds
+	const newTr = document.createElement("tr");
+
+	for (const value of rowValues) {
+		const newTd = document.createElement("td");
+		newTd.textContent = value;
+		newTr.appendChild(newTd);
+	}
+
+	//	Append the new tr to the tbody
+	tbody.appendChild(newTr);
+
+	document.getElementById("clearbutton").style.display = "block";
+	saveListData();
+};
+
+/*
+ * Clears the data in the table and hides the clear button.
+ */
+const clearButton = () => {
+	const tbody = document.getElementById("list");
+	while (tbody.firstChild) {
+		tbody.removeChild(tbody.firstChild);
+	}
+
+	document.getElementById("clearbutton").style.display = "none";
+	saveListData();
+};
+
+/*
+ * Resets the form inputs after a successful submission.
+ */
+const resetFields = () => {
+	document.getElementById("survey_form").reset();
+	document.getElementById("game-genre-other-wrapper").style.display = "none";
+	document.getElementById("game-other-text").style.display = "none";
+	document.getElementById("name").focus();
+};
+
+/*
+ * Saves the data in the table to localStorage.
+ */
+const saveListData = () => {
+	const list = document.getElementById("list");
+	localStorage.setItem("surveyData", list.innerHTML);
+};
+
 // Add the event listener for the document load
 document.addEventListener("DOMContentLoaded", () => {
+	//	Check the local storage for existing data
+	if (localStorage.getItem("surveyData")) {
+		//	Populate the table with the stored data
+		document.getElementById("list").innerHTML = localStorage.getItem("surveyData");
+		document.getElementById("clearbutton").style.display = "block";
+	}
+
 	// Ensure all error messages are hidden on load
 	hideAllErrors();
 
@@ -252,12 +342,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById("survey_form").addEventListener("submit", validate);
 
 	// Reset the form using the default browser reset
-	// This is done to ensure the radio buttons are unchecked when the page is refreshed
-	// This line of code must be done before attaching the event listener for the customer reset
 	document.getElementById("survey_form").reset();
 
 	// Add event listener for our custom form reset function
 	document.getElementById("survey_form").addEventListener("reset", resetForm);
+
+	// Add event listener for the table clear button
+	document.getElementById("clearbutton").addEventListener("click", clearButton);
 
 	// Initialize and add event listeners for the "Other" fields
 	toggleGenreOther();
