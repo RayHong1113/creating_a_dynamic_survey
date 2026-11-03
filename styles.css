@@ -196,3 +196,35 @@ footer {
 	margin: 0px auto;
 	display: none;
 }
+
+@media screen and (max-width: 768px) {
+	main#wrapper {
+		width: 95%;
+		padding: 1rem;
+	}
+
+	p.notice,
+	.formfield {
+		width: 100%;
+	}
+
+	input:not([type='radio']):not([type='checkbox']),
+	select,
+	textarea,
+	#game-other-text {
+		width: 100%;
+	}
+
+	button[type='submit'],
+	button[type='reset'],
+	#clearbutton {
+		width: 100%;
+		margin: 5px 0;
+	}
+
+	table {
+		width: 95%;
+		display: block;
+		overflow-x: auto;
+	}
+}
