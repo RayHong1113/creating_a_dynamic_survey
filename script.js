@@ -4,8 +4,6 @@
 	Ray Hong
  */
 
-let isAutoResetting = false;
-
 /**
  * Handles the submit event of the survey form.
  *
@@ -270,11 +268,6 @@ const toggleGameOther = () => {
  * @return {boolean} True allows the reset to happen; False prevents the browser from resetting the form
  */
 const resetForm = (e) => {
-	// Skip confirmation when automatically resetting after a valid submit
-	if (isAutoResetting) {
-		return true;
-	}
-
 	// Confirm that the user wants to reset the form.
 	if (confirm("Clear survey?")) {
 		// Ensure all error fields are hidden
@@ -379,9 +372,16 @@ const clearButton = () => {
  * Resets the form inputs after a successful submission.
  */
 const resetFields = () => {
-	isAutoResetting = true;
-	document.getElementById("survey_form").reset();
-	isAutoResetting = false;
+	const inputs = document.querySelectorAll("#survey_form input, #survey_form select, #survey_form textarea");
+
+	for (const input of inputs) {
+		if (input.type === "radio" || input.type === "checkbox") {
+			input.checked = false;
+		} else {
+			input.value = "";
+		}
+	}
+
 	document.getElementById("game-genre-other-wrapper").style.display = "none";
 	document.getElementById("game-other-text").style.display = "none";
 	document.getElementById("name").focus();
