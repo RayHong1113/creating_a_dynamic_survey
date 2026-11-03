@@ -151,6 +151,26 @@ const hideAllErrors = () => {
 };
 
 /*
+ * Shows or hides a conditional "Other" text field based on whether
+ * the "Other" option is active.
+ *
+ * param isOtherSelected  True if the "Other" option is selected
+ * param containerElement The element to show or hide
+ * param inputElement     The text input to clear and focus
+ */
+const toggleOtherField = (isOtherSelected, containerElement, inputElement) => {
+	if (isOtherSelected) {
+		//	Ensure the other field is displayed and focused
+		containerElement.style.display = "block";
+		inputElement.value = "";
+		inputElement.focus();
+	} else {
+		//	Hide the other field when not selected
+		containerElement.style.display = "none";
+	}
+};
+
+/*
  * Handles the change event for the game genre dropdown to show or hide
  * the "Other" specification text field.
  */
@@ -159,15 +179,18 @@ const toggleGenreOther = () => {
 	const otherWrapper = document.getElementById("game-genre-other-wrapper");
 	const otherInput = document.getElementById("game-genre-other-text");
 
-	if (genreSelect.value === "Other") {
-		//	Ensure the other game genre field is displayed and focused
-		otherWrapper.style.display = "block";
-		otherInput.value = "";
-		otherInput.focus();
-	} else {
-		//	Hide the other game genre field when not selected
-		otherWrapper.style.display = "none";
-	}
+	toggleOtherField(genreSelect.value === "Other", otherWrapper, otherInput);
+};
+
+/*
+ * Handles the change event for the "Other" favorite game checkbox to
+ * show or hide its specification text field.
+ */
+const toggleGameOther = () => {
+	const gameOtherCheckbox = document.getElementById("game-other");
+	const gameOtherInput = document.getElementById("game-other-text");
+
+	toggleOtherField(gameOtherCheckbox.checked, gameOtherInput, gameOtherInput);
 };
 
 /*
@@ -183,8 +206,9 @@ const resetForm = (e) => {
 		// Ensure all error fields are hidden
 		hideAllErrors();
 
-		// Hide the conditional other game genre field
+		// Hide the conditional other fields
 		document.getElementById("game-genre-other-wrapper").style.display = "none";
+		document.getElementById("game-other-text").style.display = "none";
 
 		// Set focus to the first text field on the page
 		document.getElementById("name").focus();
@@ -235,7 +259,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Add event listener for our custom form reset function
 	document.getElementById("survey_form").addEventListener("reset", resetForm);
 
-	// Initialize and add event listener for the game genre dropdown
+	// Initialize and add event listeners for the "Other" fields
 	toggleGenreOther();
+	toggleGameOther();
 	document.getElementById("game-genre").addEventListener("change", toggleGenreOther);
+	document.getElementById("game-other").addEventListener("change", toggleGameOther);
 });
