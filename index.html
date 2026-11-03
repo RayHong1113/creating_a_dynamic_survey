@@ -8,29 +8,42 @@
 		<title>CatCat Game Survey</title>
 	</head>
 	<body>
-		<main id="wrapper">
+		<main id="wrapper" aria-label="Survey Container">
 			<h1>CatCat Game Survey</h1>
 			<p class="notice">
 				Dear Gamer:
 				Hello! To provide our players with a better gaming experience, we are conducting this questionnaire survey. We kindly ask you to take a
-				few minutes to fill it out. We hope to get your true thoughts and valuable feedback. This survey could be conducted anonymously, and all data will be used solely for statistical analysis, so please feel free to complete it. There are no right or wrong answers, and thank you for your help.
+				few minutes to fill it out. We hope to get your true thoughts and valuable feedback. All data will be used solely for statistical analysis, so please feel free to complete it. There are no right or wrong answers, and thank you for your help.
 			</p>
 
-			<form method="post" id="survey_form" action="https://httpbin.org/post" novalidate>
+			<form method="post" id="survey_form" action="https://httpbin.org/post" aria-label="CatCat Game Survey Form" novalidate>
 				<!-- Section 1: Player Information -->
 				<fieldset>
 					<legend>Player Information</legend>
 
 					<!-- Basic Form Inputs: Name & Email -->
 					<div class="formfield">
-						<label for="name">Full Name (Optional):</label>
-						<input type="text" id="name" name="name" placeholder="Enter or leave blank" autofocus />
-						<span class="error-message error" id="name-error">Please enter a valid name.</span>
+						<label for="name">* Full Name:</label>
+						<input
+							type="text"
+							id="name"
+							name="name"
+							placeholder="Enter your full name"
+							required
+							autofocus
+						/>
+						<span class="error-message error" id="name-error">Please enter your full name.</span>
 					</div>
 
 					<div class="formfield">
 						<label for="email">* Email Address:</label>
-						<input type="email" id="email" name="email" placeholder="example@email.com" required />
+						<input
+							type="email"
+							id="email"
+							name="email"
+							placeholder="example@email.com"
+							required
+						/>
 						<span class="error-message error" id="email-error">Please enter a valid email address.</span>
 					</div>
 
@@ -52,7 +65,7 @@
 					<!-- Choice-Based Input: Radio Button Group  -->
 					<div class="formfield">
 						<h3>* 1. What is your gender?</h3>
-						<ul>
+						<ul role="radiogroup" aria-label="Gender options">
 							<li>
 								<input type="radio" id="gender-male" name="gender" value="Male" />
 								<label for="gender-male">Male</label>
@@ -105,7 +118,7 @@
 					<!-- Choice-Based Input: Checkbox Group-->
 					<div class="formfield">
 						<h3>* 3. Which CatCat games do you like the most? [Multiple Choice]</h3>
-						<ul>
+						<ul role="group" aria-label="Favorite CatCat games options">
 							<li>
 								<input type="checkbox" id="game-gac" name="favorite-games" value="Grand Auto Cat" />
 								<label for="game-gac">Grand Auto Cat</label>
@@ -172,7 +185,12 @@
 					<!-- Additional Input 2: Date Picker -->
 					<div class="formfield">
 						<label for="start-date">* 5. When did you first start playing CatCat games?</label>
-						<input type="date" id="start-date" name="start-date" required />
+						<input
+							type="date"
+							id="start-date"
+							name="start-date"
+							required
+						/>
 						<span class="error-message error" id="start-date-error">Please select a start date.</span>
 					</div>
 
@@ -199,7 +217,7 @@
 			</form>
 		</main>
 
-		<table>
+		<table aria-label="Submitted Survey Responses">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -217,7 +235,7 @@
 		</table>
 
 		<footer>
-			<button id="clearbutton" type="button">Clear</button>
+			<button id="clearbutton" type="button" aria-label="Clear stored survey data from the table">Clear</button>
 		</footer>
 	</body>
 </html>
